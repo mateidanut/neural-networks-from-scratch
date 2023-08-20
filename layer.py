@@ -2,15 +2,16 @@ import numpy as np
 
 
 class Layer:
-    def __init__(self, input_size, output_size):
+    def __init__(self, input_size, output_size, weight_multiplier=0.01):
         self.input_size = input_size
         self.output_size = output_size
 
-        #self.neurons = np.random.randn(input_size + 1, output_size)
-        self.neurons = np.ones((input_size + 1, output_size))
+        self.neurons = weight_multiplier * np.random.randn(input_size + 1, output_size)
+        #self.neurons = np.ones((input_size + 1, output_size))
+        self.neurons[0, :] = 0
 
 
-    def __call__(self, batched_input):
+    def forward(self, batched_input):
 
         batched_input_with_bias = np.insert(
             batched_input,
@@ -29,7 +30,7 @@ class Layer:
 if __name__ == '__main__':
     layer = Layer(3, 4)
 
-    print(layer(np.array([
+    print(layer.forward(np.array([
             [1, 2, 3],
             [1, 1, 1],
         ])
